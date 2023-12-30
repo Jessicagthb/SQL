@@ -1,0 +1,53 @@
+#Using a database with multiple tables I gathered sales statistics using SQL queries.
+
+
+
+
+
+#How many orders were placed in January (excluding inconclusive data).
+SELECT COUNT(orderID) 
+FROM BIT_DB.JanSales
+WHERE length(orderID) =6
+AND orderID <> 'OrderID';
+
+#How many orders were placed in January for an Iphone (excluding inconclusive data).
+SELECT COUNT(orderID) 
+FROM BIT_DB.JanSales
+WHERE length(orderID) =6
+AND Product = 'iPhone'
+AND orderID <> 'OrderID';
+
+#View account numbers for customers who made purchases in February (excluding inconclusive data).
+SELECT DISTINCT acctnum 
+FROM BIT_DB.customers cust
+INNER JOIN BIT_DB.FebSales Feb
+ON Feb.orderID = cust.order_id
+WHERE length(orderID) =6
+AND orderID <> 'OrderID';
+
+#What was the least amount spent on a product in January and what was the price.
+SELECT Product, MIN(price)
+FROM BIT_DB.JanSales
+GROUP BY Product, price
+ORDER BY price ASC
+LIMIT 1;
+
+#What is the total revenue for each product sold in January.
+SELECT Product, SUM(Quantity)*price AS Janrevenue
+FROM BIT_DB.JanSales
+GROUP BY Product;
+
+#Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue.
+SELECT DISTINCT Product, SUM(Quantity), SUM(Quantity)*price AS Febrevenue
+FROM BIT_DB.FebSales 
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+#How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers.
+SELECT COUNT(distinct cust.acctnum) totalcustomers, AVG(Quantity*price) avgspent
+FROM BIT_DB.FebSales AS feb
+LEFT JOIN BIT_DB.customers AS cust
+ON feb.orderID = cust.order_id
+WHERE feb.Quantity >2
+AND length(orderID)=6
+AND orderID <> 'OrderID';
