@@ -1,4 +1,4 @@
-#This is the data set utilized:
+---This is the data set utilized:
 
 
 CREATE TABLE fortune_companies (
@@ -61,12 +61,12 @@ VALUES
 
 
 
-#Queries used on above data set:
+---Queries used on above data set:
 
-# Select all information pertaining to the data:
+---Select all information pertaining to the data:
 SELECT * FROM fortune_companies;
 
-# Which company and industry offers both healthcare and leave for new mothers, assigning "yes" to industries that offer healthcare and "no" to industries that do not.. Which company offers at least 12 weeks for 
+---Which company and industry offers both healthcare and leave for new mothers, assigning "yes" to industries that offer healthcare and "no" to industries that do not.. Which company offers at least 12 weeks for 
 maternity leave:
 SELECT company_name, industry, maternity_leave_weeks, 
   CASE WHEN healthcare_benefits =1 THEN "yes"
@@ -76,14 +76,13 @@ SELECT company_name, industry, maternity_leave_weeks,
   WHERE maternity_leave_weeks >=12
   ORDER BY maternity_leave_weeks DESC;
 
-
-# Which company has a revenue of at least $300 Billion AND employees less than 10,000:
+ ---Which company has a revenue of at least $300 Billion and employees less than 10,000:
 SELECT * FROM fortune_companies
 WHERE revenue >=300 AND employees <10000
 ORDER BY revenue DESC;
 
 
- # What is the average revenue and tenure for each industry with an average tenure of no less than 6:
+ ---What is the average revenue and tenure for each industry with an average tenure of no less than 6:
  SELECT industry, AVG(revenue) AS avg_industry_revenue, avg_employee_tenure AS avg_industry_tenure
  FROM fortune_companies
  GROUP BY industry
