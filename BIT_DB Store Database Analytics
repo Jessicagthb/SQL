@@ -1,23 +1,23 @@
-#Using a database with multiple tables I gathered sales statistics using SQL queries.
+---Using a database with multiple tables I gathered sales statistics using SQL queries.
 
 
 
 
 
-#How many orders were placed in January (excluding inconclusive data).
+---How many orders were placed in January (excluding inconclusive data).
 SELECT COUNT(orderID) 
 FROM BIT_DB.JanSales
 WHERE length(orderID) =6
 AND orderID <> 'OrderID';
 
-#How many orders were placed in January for an Iphone (excluding inconclusive data).
+---How many orders were placed in January for an Iphone (excluding inconclusive data).
 SELECT COUNT(orderID) 
 FROM BIT_DB.JanSales
 WHERE length(orderID) =6
 AND Product = 'iPhone'
 AND orderID <> 'OrderID';
 
-#View account numbers for customers who made purchases in February (excluding inconclusive data).
+---View account numbers for customers who made purchases in February (excluding inconclusive data).
 SELECT DISTINCT acctnum 
 FROM BIT_DB.customers cust
 INNER JOIN BIT_DB.FebSales Feb
@@ -25,25 +25,25 @@ ON Feb.orderID = cust.order_id
 WHERE length(orderID) =6
 AND orderID <> 'OrderID';
 
-#What was the least amount spent on a product in January and what was the price.
+---What was the least amount spent on a product in January and what was the price.
 SELECT Product, MIN(price)
 FROM BIT_DB.JanSales
 GROUP BY Product, price
 ORDER BY price ASC
 LIMIT 1;
 
-#What is the total revenue for each product sold in January.
+---What is the total revenue for each product sold in January.
 SELECT Product, SUM(Quantity)*price AS Janrevenue
 FROM BIT_DB.JanSales
 GROUP BY Product;
 
-#Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue.
+---Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue.
 SELECT DISTINCT Product, SUM(Quantity), SUM(Quantity)*price AS Febrevenue
 FROM BIT_DB.FebSales 
 WHERE location = '548 Lincoln St, Seattle, WA 98101'
 GROUP BY Product;
 
-#How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers.
+---How many customers ordered more than 2 products at a time, and what was the average amount spent for those customers.
 SELECT COUNT(distinct cust.acctnum) totalcustomers, AVG(Quantity*price) avgspent
 FROM BIT_DB.FebSales AS feb
 LEFT JOIN BIT_DB.customers AS cust
@@ -52,39 +52,39 @@ WHERE feb.Quantity >2
 AND length(orderID)=6
 AND orderID <> 'OrderID';
 
-#What orders were placed between February 13th and February 18th.
+---What orders were placed between February 13th and February 18th.
 SELECT orderdate
 FROM BIT_DB.FebSales
 WHERE orderdate between '02/13/19 00:00' AND '02/18/19 00:00';
 
-#In what loacation was the order that took place on February 18th at 1:35 placed.
+---In what loacation was the order that took place on February 18th at 1:35 placed.
 SELECT location
 FROM BIT_DB.FebSales 
 WHERE orderdate = '02/18/19 01:35';
 
-#How many orders were on February 18th.
+---How many orders were on February 18th.
 SELECT SUM(Quantity)
 FROM BIT_DB.FebSales 
 WHERE orderdate like '02/18/19%';
 
-#Which orders were for batteries of any kind.
+---Which orders were for batteries of any kind.
 SELECT distinct Product
 FROM BIT_DB.FebSales
 WHERE Product like '%Batteries%';
 
-#Which products' prices end in 99 cents.
+---Which products' prices end in 99 cents.
 SELECT distinct Product, price
 FROM BIT_DB.FebSales 
 WHERE price like '%.99';
 
-#What products were ordered in Los Angeles and how many of each were there.
+---What products were ordered in Los Angeles and how many of each were there.
 SELECT Product, SUM(Quantity) 
 FROM BIT_DB.FebSales
 WHERE location like '%Los Angeles%'
 GROUP BY Product;
 
 
-#Which locations in New York received at least 3 orders in January, and how many orders did they each receive. -------------reword
+---Which locations in New York received at least 3 orders in January, and how many orders did they each receive. -------------reword
 SELECT DISTINCT location, COUNT(orderID) totalOrders
 FROM BIT_DB.JanSales
 WHERE location like '%NY%'
@@ -93,13 +93,13 @@ AND orderID <> 'Order ID'
 GROUP BY location
 HAVING  totalOrders>2;
 
-#How many of each type of headphone were sold in February----------------------reword
+---How many of each type of headphone were sold in February----------------------reword
 SELECT SUM(Quantity) AS quantity, Product
 FROM BIT_DB.JanSales
 WHERE Product like '%Headphone%'
 GROUP BY Product;
 
-#What was the average amount spent per account in February------------------------reword
+---What was the average amount spent per account in February------------------------reword
 SELECT SUM(Quantity*price) / COUNT(CS.acctnum)
 FROM BIT_DB.FebSales as FS
 LEFT JOIN BIT_DB.customers as CS
@@ -107,7 +107,7 @@ ON  CS.order_id = FS.orderID
 WHERE length(orderID) =6
 AND orderID <> 'OrderID';
 
-#What was the average quantity of products purchased per account in February-----------------------reword
+---What was the average quantity of products purchased per account in February-----------------------reword
 SELECT SUM(Quantity) / COUNT(CS.acctnum)
 FROM BIT_DB.FebSales AS FS
 LEFT JOIN BIT_DB.customers AS CS
@@ -115,18 +115,18 @@ ON FS.orderID = CS.order_id
 WHERE length(orderID) =6
 AND orderID <> 'OrderID';
 
-#Which product brought in the most revenue in January and how much revenue did it bring in total-----------------reword
+---Which product brought in the most revenue in January and how much revenue did it bring in total-----------------reword
 SELECT Product, SUM(price*Quantity) AS revenue
 FROM BIT_DB.JanSales
 GROUP BY Product
 ORDER BY revenue DESC
 LIMIT 1;
 
-#Part 1 of manual confimation for the previous code.
+---Part 1 of manual confimation for the previous code.
 SELECT Product, price
 FROM BIT_DB.JanSales
 WHERE Product ='iPhone';
-#Part 2 of manual confimation for the previous code.
+---Part 2 of manual confimation for the previous code.
 SELECT SUM(Quantity)
 FROM BIT_DB.JanSales
 WHERE Product = 'iPhone';
