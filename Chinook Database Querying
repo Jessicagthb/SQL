@@ -20,7 +20,7 @@ limit 1;
 
 
 
----Which employee sales rep has improved the most since working at this company;
+---Which employee sales rep improved the most since their first year at the company;
 with tb1 as (
     select em.FirstName || ' ' ||em.LastName as Sales_Agent, round(sum(inv.Total),2) as total_sales_09
     from employees as em
