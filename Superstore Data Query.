@@ -26,20 +26,20 @@ VALUES
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
 
-#Use a SELECT statement to order the items by price.
+---Use a SELECT statement to order the items by price.
 SELECT * FROM superstore
 WHERE category = 'Kitchen Supplies'
 ORDER BY price DESC;
 
-#Show a statistic about the item prices.
+---Show a statistic about the item prices.
 SELECT AVG(price) AS 'average_price'
 FROM superstore;
 
-#Show a statistic about the price for items in the category of "Kitchen Supplies".
+---Show a statistic about the price for items in the category of "Kitchen Supplies".
 SELECT MIN(price) FROM superstore
 WHERE category = 'Kitchen Supplies';
 
-#Show the stock quantity and rating of each item.
+---Show the stock quantity and rating of each item.
 SELECT item_name, stock_quantity, average_rating
 FROM superstore
 ORDER BY stock_quantity ASC;
