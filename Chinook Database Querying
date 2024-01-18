@@ -1,0 +1,137 @@
+
+
+---What is the average revenue per year
+select round(sum(Total)/COUNT(DISTINCT SUBSTR(InvoiceDate, 1, 4)),2) as avg_yearly_revenue
+from invoices;
+
+
+---Which artist had the most songs sold
+select art.Name, sum(it.Quantity) as total_songs_sold
+from artists art
+join albums al
+    on art.ArtistId = al.ArtistId
+join tracks tr
+    on al.AlbumId = tr.AlbumId
+join invoice_items it
+    on tr.TrackId = it.TrackId
+group by art.Name
+order by sum(Quantity) desc
+limit 1;
+
+
+
+---Which employee sales rep has improved the most since working at this company;
+with tb1 as (
+    select em.FirstName || ' ' ||em.LastName as Sales_Agent, round(sum(inv.Total),2) as total_sales_09
+    from employees as em
+     join customers as cm
+         on em.EmployeeId = cm.SupportRepId
+     join invoices as inv
+         on cm.CustomerId = inv.CustomerID
+     where em.title = 'Sales Support Agent'
+     and inv.InvoiceDate like '2009%'
+     group by em.FirstName || ' ' ||em.LastName),
+ 
+tb2 as (
+    select em.FirstName || ' ' ||em.LastName as Sales_Agent, round(sum(inv.Total),2) as total_sales_13
+    from employees as em
+     join customers as cm
+         on em.EmployeeId = cm.SupportRepId
+     join invoices as inv
+         on cm.CustomerId = inv.CustomerID
+     where em.title = 'Sales Support Agent'
+     and inv.InvoiceDate like '2013%'
+     group by em.FirstName || ' ' ||em.LastName)
+
+select tb1.Sales_agent, tb1.total_sales_09, tb2.total_sales_13, round((tb2.total_sales_13 - tb1.total_sales_09),2) as difference
+from tb1
+join tb2
+    on tb1.Sales_Agent= tb2.Sales_Agent;
+
+
+
+ 
+---Show customers that are not living in the U.S.
+select FirstName || ' ' ||LastName as Name, CustomerId, Country
+from chinook.customers
+where Country <> 'USA';
+
+
+---Show the customers that live in Brazil
+select *
+from customers
+where Country = 'Brazil';
+
+
+
+
+---Show the Brazillian's invoices
+select cm.FirstName || ' ' || cm.LastName as customer_name, InvoiceId, InvoiceDate, BillingCountry
+from customers as cm
+join invoices as inv
+    on cm.CustomerId = inv.CustomerId
+    where Country = 'Brazil';
+
+
+---Which employees are sales agents
+select EmployeeId, FirstName || ' ' ||LastName as Name, Title, Phone, Email
+from employees
+where Title = 'Sales Support Agent';
+
+
+---What countries have been serviced
+select distinct BillingCountry as  "Countries_serviced"
+from chinook.invoices;
+
+
+---Show the invoices associated with each sales agent
+select em.FirstName || ' ' ||em.LastName as Sales_Agent, InvoiceId
+from employees as em
+join customers as cm
+    on em.EmployeeId = cm.SupportRepid
+join invoices as inv
+    on cm.CustomerId = inv.CustomerId
+where Title = 'Sales Support Agent';
+
+
+---Show comprehensive invoice information 
+select inv.Total, cm.FirstName || ' ' ||cm.LastName as Customer, cm.Country, em.FirstName || ' ' ||em.LastName as Sales_Agent
+from invoices as inv
+join customers as cm
+    on inv.CustomerId = cm.CustomerId
+join employees as em
+    on em.EmployeeId = cm.SupportRepid;
+    
+
+---How many invoices were there in 2009?
+select count(*) as invoice_quantity_from_2009
+from invoices 
+where InvoiceDate like '2009%';
+
+
+---What were the total sales for 2009?
+select sum(Total) as invoice_price_total_from_2009
+from invoices 
+where InvoiceDate like '2009%';
+
+
+---Show the purchased track name with each invoice line ID
+select tr.Name, it.InvoiceLineId
+from tracks as tr
+join invoice_items as it
+    on tr.TrackId = it.TrackId;
+    
+
+
+---Write a query that includes the purchased track name and artist name with each invoice line ID.
+select tr.Name, art.Name, it.InvoiceLineId
+from chinook.tracks as tr
+join albums as al
+    on tr.AlbumId = al.AlbumId
+join artists as art
+    on art.ArtistId = al.ArtistId
+join invoice_items as it
+    on tr.TrackId = it.TrackId;
+
+
+
